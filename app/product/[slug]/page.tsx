@@ -111,7 +111,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                   <div className="flex flex-wrap items-center gap-2 mb-3">
                     <span className="border border-gray-200 rounded px-3 py-1.5 text-sm">
                       Price: <strong className="text-brand">{formatTaka(product.price)}৳</strong>{" "}
-                      {product.oldPrice > product.price && <span className="text-muted line-through">{formatTaka(product.oldPrice)}৳</span>}
+                      {product.oldPrice && product.oldPrice > product.price && (<span className="text-muted line-through">{formatTaka(product.oldPrice)}৳</span>)}
                     </span>
                     <span className="border border-gray-200 rounded px-3 py-1.5 text-sm">
                       Status: <strong className="text-emerald-600">{detail.status}</strong>
