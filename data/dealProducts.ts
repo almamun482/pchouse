@@ -5,7 +5,8 @@ export type DealProduct = {
   price: number;
   oldPrice: number;
   rating: number;
-  image: string;
+  image: string; // main/cover image — used everywhere (cards, listings)
+  images?: string[]; // optional: additional gallery images for the product page. If omitted, only `image` is shown.
 };
 
 export const specialsOfferProducts: DealProduct[] = [
@@ -25,7 +26,7 @@ export const specialsOfferProducts: DealProduct[] = [
   { id: 114, slug: "magegee-captain87-keyboard", name: "MageGee Captain87 Rapid Trigger Magnetic Switch Keyboard", price: 6300, oldPrice: 6900, rating: 5, image: "photo-1595225476474-63038da0f2f9" },
   { id: 115, slug: "furycube-g87-keyboard", name: "Furycube G87 RGB Gasket Hot-swappable Wired Mechanical Keyboard", price: 4500, oldPrice: 4900, rating: 5, image: "photo-1595225476474-63038da0f2f9" },
   { id: 116, slug: "magegee-gk960-keyboard", name: "MageGee GK960 Wired RGB Gaming Keyboard", price: 2300, oldPrice: 2600, rating: 5, image: "photo-1595225476474-63038da0f2f9" },
-  { id: 117, slug: "furycube-g9-pro-mouse", name: "Furycube G9 Pro Lightweight Ergonomic Wireless Gaming Mouse", price: 3500, oldPrice: 4000, rating: 5, image: "photo-1527814050087-3793815479db" },
+  { id: 117, slug: "furycube-g9-pro-mouse", name: "Furycube G9 Pro Lightweight Ergonomic Wireless Gaming Mouse", price: 3500, oldPrice: 4000, rating: 5, image: "photo-1527814050087-3793815479db", images: ["photo-1527814050087-3793815479db", "photo-1527814050087-3793815479db", "photo-1527814050087-3793815479db"] },
   { id: 118, slug: "mchose-g3-v2-pro-mouse", name: "MCHOSE G3 V2 Pro Tri-mode Gaming Mouse", price: 4200, oldPrice: 4600, rating: 5, image: "photo-1527814050087-3793815479db" },
 ];
 

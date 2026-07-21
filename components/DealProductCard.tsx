@@ -13,7 +13,8 @@ export default function DealProductCard({ product }: { product: DealProduct }) {
   return (
     <Link
       href={`/product/${product.slug}`}
-      className="group relative block bg-white border border-gray-100 rounded-lg shadow-card hover:shadow-lg transition-shadow overflow-hidden"
+      className="group relative block bg-white border border-gray-100 rounded-lg shadow-card transition-all duration-300 ease-out hover:scale-105 overflow-hidden"
+      style={{ borderBottom: "1px solid rgba(0,0,0,0.15)" }}
     >
       {save > 0 && (
         <span className="absolute left-2 top-2 z-10 rounded px-2 py-0.5 text-[11px] font-semibold text-white bg-sky-600">
@@ -26,7 +27,7 @@ export default function DealProductCard({ product }: { product: DealProduct }) {
           src={`https://images.unsplash.com/${product.image}?w=400&h=400&fit=crop`}
           alt={product.name}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          className="object-cover"
         />
       </div>
 

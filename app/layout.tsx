@@ -3,6 +3,9 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import FloatingContactButtons from "@/components/FloatingContactButtons";
+import { CartProvider } from "@/context/CartContext";
+import CartAddedModal from "@/components/CartAddedModal";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,10 +26,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} flex min-h-screen flex-col antialiased`}>
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+      <body className="flex min-h-screen flex-col antialiased">
+        <CartProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <FloatingContactButtons />
+          <CartAddedModal />
+        </CartProvider>
       </body>
     </html>
   );

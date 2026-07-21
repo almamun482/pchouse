@@ -22,7 +22,7 @@ const branchIcons = { "Retail Branch": Store, "Head Office": Building2, "Service
 
 export default function Footer() {
   return (
-    <footer className="bg-brand-dark text-white/80 mt-16">
+    <footer className="bg-brand-dark text-white/80">
       {/* Support desk strip */}
       <div className="border-b border-white/10">
         <div className="container-x py-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

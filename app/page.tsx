@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import HeroSlider from "@/components/HeroSlider";
 import FeaturedCategoryGrid from "@/components/FeaturedCategoryGrid";
@@ -30,8 +31,8 @@ export default function HomePage() {
 
       {/* Specials Offer Products */}
       <section className="container-x pb-10">
-        <div className="text-center mb-6">
-          <h2 className="text-xl md:text-2xl font-bold text-ink">Specials Offer Products</h2>
+        <div className="bg-white rounded-lg text-center py-2 mb-6">
+          <h2 className="text-xl md:text-xl font-bold text-ink">Specials Offer Products</h2>
           <p className="text-sm text-muted">Massive Sale Alert: Insane Discounts, Limited Time Only!</p>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -41,26 +42,30 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Promo banners — replace with your real banner images */}
+      {/* Promo banners */}
       <section className="container-x pb-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="rounded-xl bg-gradient-to-br from-slate-900 to-slate-700 text-white p-8 min-h-[160px] flex flex-col justify-center">
-          <h3 className="text-2xl font-extrabold mb-2">Get Up With The Gaming Gear</h3>
-          <Link href="/category/gaming" className="text-brand text-sm font-semibold flex items-center gap-1 w-fit">
-            Shop Now <ArrowRight size={14} />
-          </Link>
-        </div>
-        <div className="rounded-xl bg-gradient-to-br from-cyan-900 to-cyan-700 text-white p-8 min-h-[160px] flex flex-col justify-center">
-          <h3 className="text-2xl font-extrabold mb-2">Teclast Android Tablet</h3>
-          <Link href="/category/tablet" className="text-brand text-sm font-semibold flex items-center gap-1 w-fit">
-            Shop Now <ArrowRight size={14} />
-          </Link>
-        </div>
+        <Link href="/category/gaming" className="group relative block rounded-xl overflow-hidden aspect-[630/238]">
+          <Image
+            src="/images/website/banner/gaming-gear-bottom-1.jpg"
+            alt="Gaming Gear Promo"
+            fill
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          />
+        </Link>
+        <Link href="/category/tablet" className="group relative block rounded-xl overflow-hidden aspect-[630/238]">
+          <Image
+            src="/images/website/banner/new-web-slider-teclast.jpg"
+            alt="Android Tablet Promo"
+            fill
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          />
+        </Link>
       </section>
 
       {/* Gaming PC */}
       <section className="container-x pb-10">
-        <div className="text-center mb-6">
-          <h2 className="text-xl md:text-2xl font-bold text-ink">Gaming PC</h2>
+        <div className="bg-white rounded-lg text-center py-2 mb-6">
+          <h2 className="text-xl md:text-xl font-bold text-ink">Gaming PC</h2>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {gamingPcProducts.map((p) => (
@@ -71,8 +76,8 @@ export default function HomePage() {
 
       {/* Laptop Offer */}
       <section className="container-x pb-10">
-        <div className="text-center mb-6">
-          <h2 className="text-xl md:text-2xl font-bold text-ink">Laptop Offer</h2>
+        <div className="bg-white rounded-lg text-center py-2 mb-6">
+          <h2 className="text-xl md:text-xl font-bold text-ink">Laptop Offer</h2>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {laptopOfferProducts.map((p) => (

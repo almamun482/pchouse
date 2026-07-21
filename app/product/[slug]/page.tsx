@@ -1,134 +1,188 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, Star, ShoppingCart, Heart, Truck, ShieldCheck, RotateCcw } from "lucide-react";
-import { findProduct, relatedProducts, products } from "@/data/products";
-import ProductCard from "@/components/ProductCard";
+import { Minus, Plus, MessageCircle, Send, Phone, ChevronRight } from "lucide-react";
+import { products } from "@/data/products";
+import { specialsOfferProducts, gamingPcProducts, laptopOfferProducts } from "@/data/dealProducts";
+import { getProductDetail } from "@/data/productDetail";
+import ProductTabs from "@/components/ProductTabs";
+import ProductGallery from "@/components/ProductGallery";
+import QuantitySelector from "@/components/QuantitySelector";
+import BuyNowButton from "@/components/BuyNowButton";
+import ViewMoreInfoLink from "@/components/ViewMoreInfoLink";
+
+const allDealProducts = [...specialsOfferProducts, ...gamingPcProducts, ...laptopOfferProducts];
+
+function formatTaka(n: number) {
+  return n.toLocaleString("en-IN");
+}
 
 export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+  const productSlugs = products.map((p) => ({ slug: p.slug }));
+  const dealSlugs = allDealProducts.map((p) => ({ slug: p.slug }));
+  return [...productSlugs, ...dealSlugs];
 }
 
 export default function ProductPage({ params }: { params: { slug: string } }) {
-  const product = findProduct(params.slug);
-  if (!product) return notFound();
+  const baseProduct = products.find((p) => p.slug === params.slug);
+  const dealProduct = allDealProducts.find((p) => p.slug === params.slug);
 
-  const related = relatedProducts(product.slug);
-  const gallery = [product.image, product.image, product.image];
+  if (!baseProduct && !dealProduct) return notFound();
+
+  const product = baseProduct
+    ? {
+        slug: params.slug,
+        name: baseProduct.name,
+        price: baseProduct.price,
+        oldPrice: baseProduct.oldPrice,
+        image: baseProduct.image,
+        rating: baseProduct.rating,
+        category: baseProduct.category,
+      }
+    : {
+        slug: params.slug,
+        name: dealProduct!.name,
+        price: dealProduct!.price,
+        oldPrice: dealProduct!.oldPrice,
+        image: dealProduct!.image,
+        rating: dealProduct!.rating,
+        category: "Product",
+      };
+
+  const detail = getProductDetail(params.slug);
+  const productImages = dealProduct?.images && dealProduct.images.length > 0
+    ? dealProduct.images
+    : [product.image];
+  const gallery = productImages;
+  const relatedList = allDealProducts.filter((p) => p.slug !== params.slug).slice(0, 10);
 
   return (
-    <div className="container-x py-8">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-1.5 text-sm text-muted mb-6 flex-wrap">
-        <Link href="/" className="hover:text-brand">Home</Link>
-        <ChevronRight size={14} />
-        <span className="hover:text-brand cursor-pointer">{product.category}</span>
-        <ChevronRight size={14} />
-        <span className="text-ink font-medium">{product.name}</span>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        {/* Gallery */}
-        <div>
-          <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-50 border border-gray-100 mb-3">
-            <Image
-              src={`https://images.unsplash.com/${product.image}?w=700&h=700&fit=crop`}
-              alt={product.name}
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div className="grid grid-cols-3 gap-3">
-            {gallery.map((g, i) => (
-              <div key={i} className="relative aspect-square rounded-md overflow-hidden border border-gray-100 cursor-pointer hover:border-brand">
-                <Image
-                  src={`https://images.unsplash.com/${g}?w=200&h=200&fit=crop`}
-                  alt={`${product.name} ${i + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            ))}
-          </div>
+    <div className="bg-white">
+      <div className="container-x py-6">
+        <div className="flex items-center gap-1.5 text-sm text-muted mb-4 flex-wrap">
+          <Link href="/" className="hover:text-brand">Home</Link>
+          <ChevronRight size={14} />
+          <span className="hover:text-brand cursor-pointer">{product.category}</span>
+          <ChevronRight size={14} />
+          <span className="hover:text-brand cursor-pointer">{detail.brand}</span>
+          <ChevronRight size={14} />
+          <span className="text-ink font-medium">{product.name}</span>
         </div>
 
-        {/* Info */}
-        <div>
-          <h1 className="text-2xl font-bold text-ink mb-2">{product.name}</h1>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  size={15}
-                  className={
-                    i < Math.round(product.rating)
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "text-gray-200"
-                  }
-                />
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <aside className="lg:col-span-1 bg-white section-card p-5 h-fit">
+            <h3 className="text-lg font-medium text-[#212529] mb-4 pb-3 border-b border-gray-100">Related Product</h3>
+            <div className="space-y-3">
+              {relatedList.map((p) => (
+                <Link
+                  key={p.id}
+                  href={`/product/${p.slug}`}
+                  className="flex items-center gap-3 border border-gray-200 rounded-lg p-3 hover:border-brand transition-colors"
+                >
+                  <div className="relative h-14 w-14 shrink-0 rounded bg-gray-50 overflow-hidden">
+                    <Image src={`https://images.unsplash.com/${p.image}?w=100&h=100&fit=crop`} alt={p.name} fill className="object-cover" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-brand-dark line-clamp-2 leading-snug mb-1">{p.name}</p>
+                    <p className="text-sm">
+                      {p.oldPrice > p.price ? (
+                        <>
+                          <span className="font-bold" style={{ color: "#EF4A23" }}>{formatTaka(p.price)}৳</span>{" "}
+                          <span className="text-gray-500 line-through">{formatTaka(p.oldPrice)}৳</span>
+                        </>
+                      ) : (
+                        <span className="font-bold text-ink">{formatTaka(p.price)}৳</span>
+                      )}
+                    </p>
+                  </div>
+                </Link>
               ))}
             </div>
-            <span className="text-sm text-muted">({product.rating} rating)</span>
-          </div>
+          </aside>
 
-          <div className="flex items-baseline gap-3 mb-5">
-            <span className="text-3xl font-extrabold text-brand">${product.price}</span>
-            {product.oldPrice && (
-              <span className="text-lg text-muted line-through">${product.oldPrice}</span>
-            )}
-          </div>
+          <div className="lg:col-span-3 space-y-6">
+            <div className="bg-white section-card p-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <ProductGallery images={gallery} alt={product.name} />
 
-          <p className="text-sm text-muted leading-relaxed mb-6">{product.description}</p>
+                <div>
+                  <h1 className="text-lg font-medium text-[#212529] mb-3">{product.name}</h1>
 
-          <div className="flex items-center gap-3 mb-6">
-            <div className="flex items-center border border-gray-200 rounded-md">
-              <button className="px-3 py-2 hover:text-brand">-</button>
-              <span className="px-4 py-2 border-x border-gray-200 text-sm">1</span>
-              <button className="px-3 py-2 hover:text-brand">+</button>
-            </div>
-            <button className="btn-primary flex-1">
-              <ShoppingCart size={16} /> Add to Cart
-            </button>
-            <button className="border border-gray-200 rounded-md p-2.5 hover:border-brand hover:text-brand">
-              <Heart size={18} />
-            </button>
-          </div>
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    <span className="border border-gray-200 rounded px-3 py-1.5 text-sm">
+                      Price: <strong className="text-brand">{formatTaka(product.price)}৳</strong>{" "}
+                      {product.oldPrice > product.price && <span className="text-muted line-through">{formatTaka(product.oldPrice)}৳</span>}
+                    </span>
+                    <span className="border border-gray-200 rounded px-3 py-1.5 text-sm">
+                      Status: <strong className="text-emerald-600">{detail.status}</strong>
+                    </span>
+                    <span className="border border-gray-200 rounded px-3 py-1.5 text-sm">
+                      Product Code: <strong>{detail.productCode}</strong>
+                    </span>
+                    <span className="border border-gray-200 rounded px-3 py-1.5 text-sm">
+                      Brand: <strong className="text-ink">{detail.brand}</strong>
+                    </span>
+                  </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 border-t border-gray-100 pt-5">
-            {[
-              { icon: Truck, text: "Free global shipping" },
-              { icon: ShieldCheck, text: "Secure payment" },
-              { icon: RotateCcw, text: "7-day easy returns" },
-            ].map((f, i) => (
-              <div key={i} className="flex items-center gap-2 text-xs text-muted">
-                <f.icon size={16} className="text-brand shrink-0" />
-                {f.text}
+                  {detail.quickSpecs.length > 0 && (
+                    <div className="space-y-1.5 mb-3">
+                      <p className="text-sm text-black">Model: {detail.model}</p>
+                      {detail.quickSpecs.map((q, i) => (
+                        <p key={i} className="text-sm text-black">{q}</p>
+                      ))}
+                    </div>
+                  )}
+
+                  <ViewMoreInfoLink />
+
+                  <div className="mt-4">
+                    <p className="font-bold text-ink mb-2">Payment Options</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="bg-brand-light border border-brand/30 rounded-lg p-3">
+                        <p className="text-lg font-extrabold text-brand">
+                          {formatTaka(product.price)}৳{" "}
+                          {product.oldPrice > product.price && (
+                            <span className="text-sm text-muted line-through font-normal">{formatTaka(product.oldPrice)}৳</span>
+                          )}
+                        </p>
+                        <p className="text-xs text-muted">Cash Discount Price</p>
+                        <p className="text-xs text-muted">Online / Cash Payment</p>
+                      </div>
+                      {detail.emiPerMonth && (
+                        <div className="border border-gray-200 rounded-lg p-3">
+                          <p className="text-lg font-extrabold text-ink">
+                            {formatTaka(detail.emiPerMonth)}৳<span className="text-sm font-normal">/month</span>
+                          </p>
+                          <p className="text-xs text-muted">Regular Price: {formatTaka(product.price)}৳</p>
+                          <p className="text-xs text-muted">EMI Facility Available***</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 mt-4">
+                    <QuantitySelector />
+                    <BuyNowButton
+                      product={{
+                        slug: product.slug ?? params.slug,
+                        name: product.name,
+                        price: product.price,
+                        image: product.image,
+                      }}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-3">
+                    <a href="https://wa.me/8801973167989" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded-md py-2.5 transition-colors"><MessageCircle size={16} /> Whatsapp</a>
+                    <a href="https://m.me/yourpage" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold rounded-md py-2.5 transition-colors"><Send size={16} /> Messenger</a>
+                    <a href="tel:+8809617179141" className="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-md py-2.5 transition-colors"><Phone size={16} /> 09617179141</a>
+                  </div>
+                </div>
               </div>
-            ))}
+            </div>
+
+            <ProductTabs detail={detail} />
           </div>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="mt-14 border border-gray-100 rounded-lg overflow-hidden">
-        <div className="flex border-b border-gray-100 text-sm font-semibold">
-          <button className="px-6 py-3 border-b-2 border-brand text-brand">Description</button>
-          <button className="px-6 py-3 text-muted hover:text-brand">Specification</button>
-          <button className="px-6 py-3 text-muted hover:text-brand">Reviews</button>
-        </div>
-        <div className="p-6 text-sm text-muted leading-relaxed">
-          <p>{product.description}</p>
-        </div>
-      </div>
-
-      {/* Related products */}
-      <div className="mt-14">
-        <h2 className="section-title mb-6">Related Products</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
-          {related.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
         </div>
       </div>
     </div>
