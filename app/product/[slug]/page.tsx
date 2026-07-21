@@ -141,8 +141,10 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                       <div className="bg-brand-light border border-brand/30 rounded-lg p-3">
                         <p className="text-lg font-extrabold text-brand">
                           {formatTaka(product.price)}৳{" "}
-                          {product.oldPrice > product.price && (
-                            <span className="text-sm text-muted line-through font-normal">{formatTaka(product.oldPrice)}৳</span>
+                          {(product.oldPrice ?? 0) > product.price && (
+                            <span className="text-sm text-muted line-through font-normal">
+                              {formatTaka(product.oldPrice!)}৳
+                            </span>
                           )}
                         </p>
                         <p className="text-xs text-muted">Cash Discount Price</p>
