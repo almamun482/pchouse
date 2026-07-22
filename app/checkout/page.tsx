@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CreditCard, Truck, Package, ShieldCheck } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import DistrictSelect from "@/components/DistrictSelect";
+import DistrictSelect from "@/components/shared/DistrictSelect";
 
 function formatTaka(n: number) {
   return n.toLocaleString("en-IN");

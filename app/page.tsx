@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import HeroSlider from "@/components/HeroSlider";
-import FeaturedCategoryGrid from "@/components/FeaturedCategoryGrid";
-import DealProductCard from "@/components/DealProductCard";
+import HeroSlider from "@/components/home/HeroSlider";
+import FeaturedCategoryGrid from "@/components/home/FeaturedCategoryGrid";
+import DealProductCard from "@/components/product/DealProductCard";
 import {
   specialsOfferProducts,
   gamingPcProducts,

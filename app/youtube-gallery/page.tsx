@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { videos } from "@/data/videos";
-import VideoGrid from "@/components/VideoGrid";
+import VideoGrid from "@/components/shared/VideoGrid";
 
 export const metadata = {
   title: "YouTube Gallery - TechPikly",

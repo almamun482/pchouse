@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { MessageCircle, Send, Phone } from "lucide-react";
-import ProductGallery from "@/components/ProductGallery";
-import QuantitySelector from "@/components/QuantitySelector";
-import ViewMoreInfoLink from "@/components/ViewMoreInfoLink";
+import ProductGallery from "@/components/product/ProductGallery";
+import QuantitySelector from "@/components/product/QuantitySelector";
+import ViewMoreInfoLink from "@/components/product/ViewMoreInfoLink";
 import { useCart } from "@/context/CartContext";
 import type { ProductDetail } from "@/data/productDetail";
 

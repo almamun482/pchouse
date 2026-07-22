@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ChevronRight, LayoutGrid, List, SlidersHorizontal } from "lucide-react";
 import { mainNav } from "@/data/mainNav";
 import { products } from "@/data/products";
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/product/ProductCard";
 
 export function generateStaticParams() {
   const slugs: string[] = [];

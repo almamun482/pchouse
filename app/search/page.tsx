@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { specialsOfferProducts, gamingPcProducts, laptopOfferProducts } from "@/data/dealProducts";
-import DealProductCard from "@/components/DealProductCard";
+import DealProductCard from "@/components/product/DealProductCard";
 
 export default function SearchPage({
   searchParams,

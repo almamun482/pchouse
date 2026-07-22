@@ -5,8 +5,8 @@ import { Minus, Plus, MessageCircle, Send, Phone, ChevronRight } from "lucide-re
 import { products } from "@/data/products";
 import { specialsOfferProducts, gamingPcProducts, laptopOfferProducts } from "@/data/dealProducts";
 import { getProductDetail } from "@/data/productDetail";
-import ProductTabs from "@/components/ProductTabs";
-import ProductPurchasePanel from "@/components/ProductPurchasePanel";
+import ProductTabs from "@/components/product/ProductTabs";
+import ProductPurchasePanel from "@/components/product/ProductPurchasePanel";
 
 const allDealProducts = [...specialsOfferProducts, ...gamingPcProducts, ...laptopOfferProducts];
 
