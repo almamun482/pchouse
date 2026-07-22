@@ -11,7 +11,7 @@ export default function ViewMoreInfoLink() {
   return (
     <button
       onClick={handleClick}
-      className="text-brand text-sm font-semibold hover:underline"
+      className="block mb-3 text-brand text-sm font-semibold hover:underline"
     >
       View More Info
     </button>

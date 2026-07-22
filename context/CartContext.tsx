@@ -8,6 +8,7 @@ export type CartItem = {
   price: number;
   image: string;
   qty: number;
+  color?: string;
 };
 
 type CartContextType = {
@@ -15,12 +16,12 @@ type CartContextType = {
   addItem: (item: Omit<CartItem, "qty">, qty?: number) => void;
   removeItem: (slug: string) => void;
   updateQty: (slug: string, qty: number) => void;
+  clearCart: () => void;
   totalQty: number;
   subtotal: number;
   lastAdded: CartItem | null;
   clearLastAdded: () => void;
 };
-
 const CartContext = createContext<CartContextType | null>(null);
 
 const STORAGE_KEY = "pchouse_cart";
@@ -50,10 +51,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem: CartContextType["addItem"] = (item, qty = 1) => {
     setItems((prev) => {
-      const existing = prev.find((i) => i.slug === item.slug);
+      const existing = prev.find((i) => i.slug === item.slug && i.color === item.color);
       if (existing) {
         return prev.map((i) =>
-          i.slug === item.slug ? { ...i, qty: i.qty + qty } : i
+          i.slug === item.slug && i.color === item.color ? { ...i, qty: i.qty + qty } : i
         );
       }
       return [...prev, { ...item, qty }];
@@ -71,6 +72,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const clearCart = () => setItems([]);
+
   const totalQty = items.reduce((sum, i) => sum + i.qty, 0);
   const subtotal = items.reduce((sum, i) => sum + i.price * i.qty, 0);
 
@@ -81,6 +84,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         addItem,
         removeItem,
         updateQty,
+        clearCart,
         totalQty,
         subtotal,
         lastAdded,

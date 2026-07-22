@@ -1,6 +1,8 @@
 export type SpecRow = { label: string; value: string };
 export type SpecSection = { title: string; rows: SpecRow[] };
 
+export type ColorOption = { label: string; image: string };
+
 export type ProductDetail = {
   slug: string;
   brand: string;
@@ -9,6 +11,7 @@ export type ProductDetail = {
   status: "In Stock" | "Out of Stock" | "Pre-order";
   warranty: string;
   quickSpecs: string[];
+  colorOptions?: ColorOption[];
   emiPerMonth?: number;
   specSections: SpecSection[];
   descriptionHeading: string;
@@ -29,6 +32,11 @@ export const productDetails: ProductDetail[] = [
     status: "In Stock",
     warranty: "6 Month Service",
     quickSpecs: ["650 ANSI Lumens", "Native 1080P, 4K Support", "Android 14, 180° Rotation", "Auto Keystone & Focus"],
+    colorOptions: [
+      { label: "White", imageIndex: 0 },
+      { label: "Black", imageIndex: 1 },
+      { label: "Color matching white and black", imageIndex: 2 },
+    ],
     emiPerMonth: 2417,
     specSections: [
       { title: "Features Projection", rows: [
@@ -57,6 +65,11 @@ export const productDetails: ProductDetail[] = [
     status: "In Stock",
     warranty: "6 Month Service",
     quickSpecs: ["900 ANSI Lumens", "Auto Focus", "Built-in Google TV", "Native 1080P"],
+    colorOptions: [
+      { label: "White", imageIndex: 0 },
+      { label: "Black", imageIndex: 1 },
+      { label: "Color matching white and black", imageIndex: 2 },
+    ],
     specSections: [
       { title: "Features Projection", rows: [
         { label: "Brightness", value: "900 ANSI Lumens" },
@@ -81,6 +94,11 @@ export const productDetails: ProductDetail[] = [
     status: "In Stock",
     warranty: "6 Month Service",
     quickSpecs: ["500 ANSI Lumens", "1080P Support", "Portable Design", "Android OS"],
+    colorOptions: [
+      { label: "White", imageIndex: 0 },
+      { label: "Black", imageIndex: 1 },
+      { label: "Color matching white and black", imageIndex: 2 },
+    ],
     specSections: [
       { title: "Features Projection", rows: [
         { label: "Brightness", value: "500 ANSI Lumens" },
@@ -104,6 +122,11 @@ export const productDetails: ProductDetail[] = [
     status: "In Stock",
     warranty: "6 Month Service",
     quickSpecs: ["Officially Licensed Netflix & YouTube", "Android Smart OS", "Home Cinema Experience"],
+    colorOptions: [
+      { label: "White", imageIndex: 0 },
+      { label: "Black", imageIndex: 1 },
+      { label: "Color matching white and black", imageIndex: 2 },
+    ],
     specSections: [
       { title: "Features Projection", rows: [
         { label: "Streaming", value: "Official Netflix & YouTube Support" },

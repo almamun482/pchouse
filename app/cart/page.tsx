@@ -3,11 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Minus, Plus, X, Ticket, ShoppingCart } from "lucide-react";
+import { ChevronRight, Minus, Plus, X, Ticket, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 function formatTaka(n: number) {
-  return (n || 0).toLocaleString("en-IN");
+  return n.toLocaleString("en-IN");
 }
 
 export default function CartPage() {
@@ -45,11 +45,7 @@ export default function CartPage() {
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       <Link href={`/product/${item.slug}`} className="relative h-16 w-16 shrink-0 rounded bg-white overflow-hidden border border-gray-100">
                         <Image
-                          src={
-                            item.image?.startsWith("http")
-                              ? item.image
-                              : `https://images.unsplash.com/${item.image}?w=150&h=150&fit=crop`
-                          }
+                          src={`https://images.unsplash.com/${item.image}?w=150&h=150&fit=crop`}
                           alt={item.name}
                           fill
                           className="object-contain p-1.5"
@@ -59,6 +55,12 @@ export default function CartPage() {
                         <Link href={`/product/${item.slug}`} className="text-sm font-semibold text-ink hover:text-brand line-clamp-2">
                           {item.name}
                         </Link>
+                        {item.color && (
+                          <p className="text-xs mt-0.5">
+                            <span className="text-muted">Color: </span>
+                            <span className="font-medium" style={{ color: "#FC724B" }}>{item.color}</span>
+                          </p>
+                        )}
                         <p className="text-xs text-muted mt-1">{formatTaka(item.price)}৳/unit</p>
                       </div>
                     </div>
@@ -102,7 +104,7 @@ export default function CartPage() {
             {/* Coupon */}
             <div className="bg-white section-card p-5">
               <div className="flex items-center gap-2 mb-1">
-                <Ticket size={18} style={{ color: "#D32F2F" }} />
+                <Ticket size={18} style={{ color: "#2782E5" }} />
                 <h3 className="font-bold text-ink">Have a Coupon?</h3>
               </div>
               <p className="text-sm text-muted mb-4">Apply your coupon for an instant discount!</p>
@@ -116,7 +118,7 @@ export default function CartPage() {
                 />
                 <button
                   className="shrink-0 text-white text-sm font-semibold rounded-full px-6 py-2.5 hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: "#D32F2F" }}
+                  style={{ backgroundColor: "#FC724B" }}
                 >
                   Apply Coupon
                 </button>
@@ -136,7 +138,7 @@ export default function CartPage() {
               <div className="border-t border-dashed border-gray-200 my-2" />
               <div className="flex justify-between font-bold text-ink py-2">
                 <span>Total</span>
-                <span style={{ color: "#D32F2F" }}>{formatTaka(total)}৳</span>
+                <span style={{ color: "#FC724B" }}>{formatTaka(total)}৳</span>
               </div>
 
               <div className="grid grid-cols-2 gap-3 mt-4">
@@ -146,12 +148,13 @@ export default function CartPage() {
                 >
                   + Add More
                 </Link>
-                <button
-                  className="text-white text-sm font-semibold rounded-full py-2.5 hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: "#D32F2F" }}
+                <Link
+                  href="/checkout"
+                  className="text-center text-white text-sm font-semibold rounded-full py-2.5 hover:opacity-90 transition-opacity"
+                  style={{ backgroundColor: "#FC724B" }}
                 >
                   Checkout
-                </button>
+                </Link>
               </div>
             </div>
           </div>

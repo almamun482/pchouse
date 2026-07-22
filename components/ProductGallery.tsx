@@ -1,22 +1,26 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import type { ColorOption } from "@/data/productDetail";
 
 export default function ProductGallery({
   images,
   alt,
+  colorOptions,
+  activeIndex,
+  onActiveIndexChange,
 }: {
   images: string[];
   alt: string;
+  colorOptions?: ColorOption[];
+  activeIndex: number;
+  onActiveIndexChange: (i: number) => void;
 }) {
-  const [active, setActive] = useState(0);
-
   return (
     <div>
       <div className="relative aspect-square rounded-lg overflow-hidden bg-white border border-gray-100 mb-6">
         <Image
-          src={`https://images.unsplash.com/${images[active]}?w=700&h=700&fit=crop`}
+          src={`https://images.unsplash.com/${images[activeIndex]}?w=700&h=700&fit=crop`}
           alt={alt}
           fill
           className="object-contain p-6"
@@ -27,11 +31,9 @@ export default function ProductGallery({
         {images.map((g, i) => (
           <button
             key={i}
-            onClick={() => setActive(i)}
+            onClick={() => onActiveIndexChange(i)}
             className={`relative h-20 w-20 shrink-0 rounded-md overflow-hidden bg-white transition-all ${
-              active === i
-                ? "border-2 border-brand"
-                : "border border-gray-200 hover:border-brand/50"
+              activeIndex === i ? "border-2 border-brand" : "border border-gray-200 hover:border-brand/50"
             }`}
           >
             <Image
