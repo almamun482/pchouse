@@ -17,14 +17,14 @@ export default function ProductPurchasePanel({
   detail,
   gallery,
 }: {
-  product: { slug: string; name: string; price: number; oldPrice: number; image: string };
+  product: { slug: string; name: string; price: number; oldPrice?: number; image: string };
   detail: ProductDetail;
   gallery: string[];
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const { addItem } = useCart();
 
-  const selectedColorLabel = detail.colorOptions?.find((c) => c.imageIndex === activeIndex)?.label;
+  const selectedColorLabel = detail.colorOptions?.find((c: any) => c.imageIndex === activeIndex)?.label;
 
   const handleBuyNow = () => {
     addItem(
@@ -55,7 +55,7 @@ export default function ProductPurchasePanel({
         <div className="flex flex-wrap items-center gap-2 mb-3">
           <span className="border border-gray-200 rounded px-3 py-1.5 text-sm">
             Price: <strong className="text-brand">{formatTaka(product.price)}৳</strong>{" "}
-            {product.oldPrice > product.price && (
+            {product.oldPrice && product.oldPrice > product.price && (
               <span className="text-muted line-through">{formatTaka(product.oldPrice)}৳</span>
             )}
           </span>
@@ -89,18 +89,18 @@ export default function ProductPurchasePanel({
               </span>
             </p>
             <div className="flex flex-wrap gap-2">
-              {detail.colorOptions.map((opt, i) => (
+              {detail.colorOptions.map((opt: any, i) => (
                 <button
                   key={i}
-                  onClick={() => setActiveIndex(opt.imageIndex)}
+                  onClick={() => setActiveIndex(opt.imageIndex ?? i)}
                   className={`relative h-16 w-16 rounded-md overflow-hidden bg-gray-50 transition-all ${
-                    activeIndex === opt.imageIndex ? "border-2" : "border border-gray-200 hover:border-gray-300"
+                    activeIndex === (opt.imageIndex ?? i) ? "border-2" : "border border-gray-200 hover:border-gray-300"
                   }`}
-                  style={activeIndex === opt.imageIndex ? { borderColor: "#FC724B" } : undefined}
+                  style={activeIndex === (opt.imageIndex ?? i) ? { borderColor: "#FC724B" } : undefined}
                   aria-label={opt.label}
                 >
                   <img
-                    src={`https://images.unsplash.com/${gallery[opt.imageIndex]}?w=150&h=150&fit=crop`}
+                    src={`https://images.unsplash.com/${gallery[opt.imageIndex ?? i]}?w=150&h=150&fit=crop`}
                     alt={opt.label}
                     className="absolute inset-0 h-full w-full object-cover"
                   />
@@ -116,7 +116,7 @@ export default function ProductPurchasePanel({
             <div className="bg-brand-light border border-brand/30 rounded-lg p-3">
               <p className="text-lg font-extrabold text-brand">
                 {formatTaka(product.price)}৳{" "}
-                {product.oldPrice > product.price && (
+                {product.oldPrice && product.oldPrice > product.price && (
                   <span className="text-sm text-muted line-through font-normal">{formatTaka(product.oldPrice)}৳</span>
                 )}
               </p>

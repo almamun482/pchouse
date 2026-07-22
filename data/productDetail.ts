@@ -1,7 +1,7 @@
 export type SpecRow = { label: string; value: string };
 export type SpecSection = { title: string; rows: SpecRow[] };
 
-export type ColorOption = { label: string; image: string };
+export type ColorOption = { label: string; imageIndex: number };
 
 export type ProductDetail = {
   slug: string;
