@@ -19,7 +19,7 @@ export default function HomePage() {
 
       {/* Notice bar — replace with your real announcement text */}
       <section className="container-x pt-6">
-        <div className="bg-white rounded-[25px] mx-auto my-2 py-4 px-[15px] shadow-[0_3px_8px_rgba(0,0,0,0.05)] overflow-hidden">
+        <div className="w-full max-w-full bg-white rounded-[25px] mx-auto my-2 py-4 px-[15px] shadow-[0_3px_8px_rgba(0,0,0,0.05)] overflow-hidden">
           <p className="animate-marquee text-sm text-muted font-medium">
             অর্ডার করার পূর্বে কাস্টমার কেয়ার থেকে পন্যের স্টক ও ডেলিভারি সম্পর্কে জেনে নেয়ার অনুরোধ করা যাচ্ছে। প্রযুক্তি পণ্যের মূল্য অস্থিতিশীল হওয়ায় কারণে যেকোন মুহূর্তে যেকোন প্রযুক্তি পণ্যের মূল্য পরিবর্তন হতে পারে।
           </p>
