@@ -57,7 +57,7 @@ export default function CartAddedModal() {
             VIEW CART
           </Link>
           <Link
-            href="/cart"
+            href="/checkout"
             onClick={clearLastAdded}
             className="text-center bg-brand-dark hover:bg-slate-800 text-white font-semibold rounded-md py-2.5 text-sm transition-colors"
           >

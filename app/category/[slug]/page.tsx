@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { ChevronRight, ChevronDown, SlidersHorizontal, X } from "lucide-react";
+import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import { mainNav } from "@/data/mainNav";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import { specialsOfferProducts, gamingPcProducts, laptopOfferProducts } from "@/data/dealProducts";
 import CategoryProductCard from "@/components/category/CategoryProductCard";
 
@@ -108,8 +109,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
   const relevantFilters = getRelevantFilters(params.slug);
 
   const filteredProducts = useMemo(() => {
-    const productsInThisCategory = allProducts.filter((p) => p.categorySlug === params.slug);
-    const base = productsInThisCategory.length > 0 ? productsInThisCategory : allProducts;
+    const base = allProducts.filter((p) => p.categorySlug === params.slug);
 
     let list = base.filter((p) => {
       if (p.price < minPrice || p.price > maxPrice) return false;
@@ -206,21 +206,18 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
 
   return (
     <div className="bg-[#F2F3F8] overflow-x-hidden">
-      <div className="container-x py-6 max-w-full">
-        <div className="flex items-center gap-1.5 text-sm text-muted mb-4 flex-wrap">
-          <Link href="/" className="hover:text-brand">Home</Link>
-          <ChevronRight size={14} />
-          <Link href={`/category/${activeParent.slug}`} className="hover:text-brand">
-            {activeParent.label}
-          </Link>
-          {subName && subName !== activeParent.label && (
-            <>
-              <ChevronRight size={14} />
-              <span className="text-ink font-medium">{subName}</span>
-            </>
-          )}
-        </div>
+      <Breadcrumb
+        items={
+          subName && subName !== activeParent.label
+            ? [
+                { label: activeParent.label, href: `/category/${activeParent.slug}` },
+                { label: subName },
+              ]
+            : [{ label: activeParent.label }]
+        }
+      />
 
+      <div className="container-x py-6 max-w-full">
         <div className="bg-white section-card p-5 mb-6">
           <h1 className="text-xl font-bold text-brand-dark mb-2">
             {subName} Price in Bangladesh (BD)
@@ -362,29 +359,31 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
           </div>
 
           <div className="lg:col-span-3 space-y-6 mt-6">
-            <div className="bg-white section-card p-6 md:p-8">
-              <h2 className="text-lg font-bold text-ink mb-4">Latest {subName} Price List</h2>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b-2 border-gray-200 text-left">
-                      <th className="py-2 pr-4 font-bold text-ink">{subName} List</th>
-                      <th className="py-2 font-bold text-ink text-right">Price In BD</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {allProducts.slice(0, 8).map((p) => (
-                      <tr key={p.id} className="border-b border-gray-100">
-                        <td className="py-2 pr-4 text-muted">{p.name}</td>
-                        <td className="py-2 text-ink font-semibold text-right whitespace-nowrap">
-                          {p.price.toLocaleString("en-IN")}৳
-                        </td>
+            {filteredProducts.length > 0 && (
+              <div className="bg-white section-card p-6 md:p-8">
+                <h2 className="text-lg font-bold text-ink mb-4">Latest {subName} Price List</h2>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b-2 border-gray-200 text-left">
+                        <th className="py-2 pr-4 font-bold text-ink">{subName} List</th>
+                        <th className="py-2 font-bold text-ink text-right">Price In BD</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {filteredProducts.slice(0, 8).map((p) => (
+                        <tr key={p.id} className="border-b border-gray-100">
+                          <td className="py-2 pr-4 text-muted">{p.name}</td>
+                          <td className="py-2 text-ink font-semibold text-right whitespace-nowrap">
+                            {p.price.toLocaleString("en-IN")}৳
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="bg-white section-card p-6 md:p-8 text-sm text-muted leading-relaxed space-y-4">
               <h2 className="text-lg font-bold text-ink">{subName} in Bangladesh</h2>

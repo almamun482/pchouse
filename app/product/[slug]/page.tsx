@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Minus, Plus, MessageCircle, Send, Phone, ChevronRight } from "lucide-react";
 import { products } from "@/data/products";
 import { specialsOfferProducts, gamingPcProducts, laptopOfferProducts } from "@/data/dealProducts";
 import { getProductDetail } from "@/data/productDetail";
+import { mainNav } from "@/data/mainNav";
 import ProductTabs from "@/components/product/ProductTabs";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import ProductPurchasePanel from "@/components/product/ProductPurchasePanel";
 
 const allDealProducts = [...specialsOfferProducts, ...gamingPcProducts, ...laptopOfferProducts];
@@ -47,6 +48,16 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
       };
 
   const detail = getProductDetail(params.slug);
+
+  const categorySlug = dealProduct?.categorySlug;
+  let productCategory = mainNav.find((c) => c.slug === categorySlug);
+  let productSubCategory = productCategory?.children.find((s) => s.slug === categorySlug);
+
+  if (!productCategory && categorySlug) {
+    productCategory = mainNav.find((c) => c.children.some((s) => s.slug === categorySlug));
+    productSubCategory = productCategory?.children.find((s) => s.slug === categorySlug);
+  }
+
   const productImages = dealProduct?.images && dealProduct.images.length > 0
     ? dealProduct.images
     : [product.image];
@@ -55,17 +66,24 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
 
   return (
     <div className="bg-white">
-      <div className="container-x py-6">
-        <div className="flex items-center gap-1.5 text-sm text-muted mb-4 flex-wrap">
-          <Link href="/" className="hover:text-brand">Home</Link>
-          <ChevronRight size={14} />
-          <span className="hover:text-brand cursor-pointer">{product.category}</span>
-          <ChevronRight size={14} />
-          <span className="hover:text-brand cursor-pointer">{detail.brand}</span>
-          <ChevronRight size={14} />
-          <span className="text-ink font-medium">{product.name}</span>
-        </div>
+      <Breadcrumb
+        items={
+          productCategory
+            ? productSubCategory && productSubCategory.slug !== productCategory.slug
+              ? [
+                  { label: productCategory.label, href: `/category/${productCategory.slug}` },
+                  { label: productSubCategory.name, href: `/category/${productSubCategory.slug}` },
+                  { label: product.name },
+                ]
+              : [
+                  { label: productCategory.label, href: `/category/${productCategory.slug}` },
+                  { label: product.name },
+                ]
+            : [{ label: product.name }]
+        }
+      />
 
+      <div className="container-x py-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <aside className="lg:col-span-1 bg-white section-card p-5 h-fit">
             <h3 className="text-lg font-medium text-[#212529] mb-4 pb-3 border-b border-gray-100">Related Product</h3>
@@ -84,7 +102,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
                     <p className="text-sm">
                       {p.oldPrice > p.price ? (
                         <>
-                          <span className="font-bold" style={{ color: "#EF4A23" }}>{formatTaka(p.price)}৳</span>{" "}
+                          <span className="font-bold text-brand">{formatTaka(p.price)}৳</span>{" "}
                           <span className="text-gray-500 line-through">{formatTaka(p.oldPrice)}৳</span>
                         </>
                       ) : (

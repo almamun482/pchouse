@@ -11,11 +11,7 @@ function formatTaka(n: number) {
   return n.toLocaleString("en-IN");
 }
 
-const deliveryOptions = [
-  { id: "home", label: "Home Delivery", fee: 110 },
-  { id: "pickup", label: "Store Pickup", fee: 0 },
-  { id: "express", label: "Request Express", fee: 200 },
-];
+import { deliveryOptions } from "@/data/deliveryOptions";
 
 const paymentOptions = [
   { id: "cod", label: "Cash on Delivery" },
@@ -25,7 +21,7 @@ const paymentOptions = [
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, subtotal, clearCart } = useCart();
+  const { items, subtotal } = useCart();
   const [delivery, setDelivery] = useState("home");
   const [district, setDistrict] = useState("Dhaka");
   const [payment, setPayment] = useState("cod");
@@ -58,7 +54,6 @@ export default function CheckoutPage() {
                 id="checkout-form"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  clearCart();
                   router.push("/checkout/success");
                 }}
                 className="bg-white section-card p-5"

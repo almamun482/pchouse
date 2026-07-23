@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { ChevronRight, Minus, Plus, X, Ticket, ShoppingCart } from "lucide-react";
+import { ChevronRight, Minus, Plus, X, Ticket, Gift, ShoppingCart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 function formatTaka(n: number) {
@@ -13,6 +13,7 @@ function formatTaka(n: number) {
 export default function CartPage() {
   const { items, removeItem, updateQty, subtotal } = useCart();
   const [coupon, setCoupon] = useState("");
+  const [voucher, setVoucher] = useState("");
 
   const total = subtotal;
 
@@ -34,7 +35,6 @@ export default function CartPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Left: products + coupon */}
           <div className="lg:col-span-3 space-y-6">
             <div className="bg-white section-card p-5">
               <h2 className="font-bold text-ink mb-4 pb-3 border-b border-gray-100">Your Products</h2>
@@ -58,10 +58,9 @@ export default function CartPage() {
                         {item.color && (
                           <p className="text-xs mt-0.5">
                             <span className="text-muted">Color: </span>
-                            <span className="font-medium" style={{ color: "#FC724B" }}>{item.color}</span>
+                            <span className="font-medium text-brand">{item.color}</span>
                           </p>
                         )}
-                        <p className="text-xs text-muted mt-1">{formatTaka(item.price)}৳/unit</p>
                       </div>
                     </div>
 
@@ -74,7 +73,16 @@ export default function CartPage() {
                         >
                           <Minus size={13} />
                         </button>
-                        <span className="w-6 text-center text-sm">{item.qty}</span>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          value={item.qty}
+                          onChange={(e) => {
+                            const raw = e.target.value.replace(/[^0-9]/g, "");
+                            updateQty(item.slug, raw === "" ? 1 : parseInt(raw, 10));
+                          }}
+                          className="w-8 text-center text-sm outline-none bg-transparent"
+                        />
                         <button
                           onClick={() => updateQty(item.slug, item.qty + 1)}
                           className="p-2 hover:text-brand"
@@ -84,9 +92,14 @@ export default function CartPage() {
                         </button>
                       </div>
 
-                      <span className="font-bold text-sm w-20 text-right" style={{ color: "#D32F2F" }}>
-                        {formatTaka(item.price * item.qty)}৳
-                      </span>
+                      <div className="w-20 text-right">
+                        <span className="font-bold text-sm text-brand block">
+                          {formatTaka(item.price * item.qty)}৳
+                        </span>
+                        <span className="text-xs text-muted block">
+                          {formatTaka(item.price)}৳/unit
+                        </span>
+                      </div>
 
                       <button
                         onClick={() => removeItem(item.slug)}
@@ -101,32 +114,59 @@ export default function CartPage() {
               </div>
             </div>
 
-            {/* Coupon */}
+            {/* Coupon + Gift Voucher */}
             <div className="bg-white section-card p-5">
-              <div className="flex items-center gap-2 mb-1">
-                <Ticket size={18} style={{ color: "#2782E5" }} />
-                <h3 className="font-bold text-ink">Have a Coupon?</h3>
-              </div>
-              <p className="text-sm text-muted mb-4">Apply your coupon for an instant discount!</p>
-              <div className="flex items-center bg-[#FAFAFA] rounded-full overflow-hidden pr-1">
-                <input
-                  type="text"
-                  placeholder="PROMO / COUPON Code"
-                  value={coupon}
-                  onChange={(e) => setCoupon(e.target.value)}
-                  className="flex-1 min-w-0 bg-transparent px-5 py-3 text-sm outline-none"
-                />
-                <button
-                  className="shrink-0 text-white text-sm font-semibold rounded-full px-6 py-2.5 hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: "#FC724B" }}
-                >
-                  Apply Coupon
-                </button>
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6 items-start">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Ticket size={18} className="text-brand" />
+                    <h3 className="font-bold text-ink">Have a Coupon?</h3>
+                  </div>
+                  <p className="text-sm text-muted mb-3">Apply your coupon for an instant discount!</p>
+                  <div className="flex items-stretch bg-[#FAFAFA] border border-gray-200 rounded-full overflow-hidden">
+                    <input
+                      type="text"
+                      placeholder="PROMO / COUPON Code"
+                      value={coupon}
+                      onChange={(e) => setCoupon(e.target.value)}
+                      className="flex-1 min-w-0 bg-transparent px-4 py-2.5 text-sm outline-none"
+                    />
+                    <button className="shrink-0 bg-brand-dark hover:bg-slate-800 text-white text-sm font-semibold px-6 transition-colors">
+                      Apply Coupon
+                    </button>
+                  </div>
+                </div>
+
+                <div className="hidden md:flex items-center justify-center text-sm text-muted h-full">or,</div>
+                <div className="md:hidden flex items-center gap-3 text-sm text-muted">
+                  <div className="flex-1 border-t border-gray-200" />
+                  or,
+                  <div className="flex-1 border-t border-gray-200" />
+                </div>
+
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Gift size={18} className="text-brand" />
+                    <h3 className="font-bold text-ink">Have any Gift Voucher?</h3>
+                  </div>
+                  <p className="text-sm text-muted mb-3">Apply your voucher for extra discount!</p>
+                  <div className="flex items-stretch bg-[#FAFAFA] border border-gray-200 rounded-full overflow-hidden">
+                    <input
+                      type="text"
+                      placeholder="Voucher Code"
+                      value={voucher}
+                      onChange={(e) => setVoucher(e.target.value)}
+                      className="flex-1 min-w-0 bg-transparent px-4 py-2.5 text-sm outline-none"
+                    />
+                    <button className="shrink-0 bg-brand-dark hover:bg-slate-800 text-white text-sm font-semibold px-6 transition-colors">
+                      Apply Voucher
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Right: order summary */}
           <div className="lg:col-span-1">
             <div className="bg-white section-card p-5 h-fit sticky top-24">
               <h3 className="font-bold text-ink mb-4">Order Summary</h3>
@@ -138,7 +178,7 @@ export default function CartPage() {
               <div className="border-t border-dashed border-gray-200 my-2" />
               <div className="flex justify-between font-bold text-ink py-2">
                 <span>Total</span>
-                <span style={{ color: "#FC724B" }}>{formatTaka(total)}৳</span>
+                <span className="text-brand">{formatTaka(total)}৳</span>
               </div>
 
               <div className="grid grid-cols-2 gap-3 mt-4">
@@ -150,8 +190,7 @@ export default function CartPage() {
                 </Link>
                 <Link
                   href="/checkout"
-                  className="text-center text-white text-sm font-semibold rounded-full py-2.5 hover:opacity-90 transition-opacity"
-                  style={{ backgroundColor: "#FC724B" }}
+                  className="text-center bg-brand-dark hover:bg-slate-800 text-white text-sm font-semibold rounded-full py-2.5 transition-colors"
                 >
                   Checkout
                 </Link>

@@ -1,8 +1,19 @@
+"use client";
+
+import { useEffect } from "react";
+import { useCart } from "@/context/CartContext";
+
 import Link from "next/link";
 import { Facebook } from "lucide-react";
 
 export default function OrderSuccessPage() {
+  const { clearCart } = useCart();
   const orderNumber = Math.floor(1000000 + Math.random() * 9000000);
+
+  useEffect(() => {
+    clearCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="bg-[#F2F3F8] py-6">

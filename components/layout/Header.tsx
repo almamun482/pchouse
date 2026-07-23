@@ -139,7 +139,7 @@ export default function Header() {
 
         <div className="hidden lg:flex items-center gap-3 ml-auto shrink-0">
           <Link
-            href="/todays-deals"
+            href="/offer"
             className="flex items-center gap-2 border border-white/20 rounded-md px-3 py-2 hover:border-brand transition-colors"
           >
             <Gift size={22} className="text-brand shrink-0" />
